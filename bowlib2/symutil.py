@@ -13,8 +13,8 @@ def saveBowToFile(bow: Bow, fileName: str) :
         file.write(bow.asJson())
 
 def loadBowFromFile(fileName: str) -> Bow:
-    with open(fileName, "r") as input:
-        return Bow.fromJson(input)
+    with open(fileName, "r") as file:
+        return Bow.fromJson(file.read())
 
 def loadSymFromFile(fileName: str) -> SymRes:
     with open(fileName, "rb") as file:
@@ -46,4 +46,6 @@ def runSimulation(bow: Bow, dynamic: bool = True, symName: str = None) -> SymRes
             bow.settings.n_limb_elements += 1
 
 def runVirtualBowGui(bowFileName: str):
+    """ Not usable, subprocess.call() blocks.\n
+    Anyone any idee how to solve that?"""
     subprocess.call([ "virtualbow-gui", bowFileName])

@@ -1,3 +1,10 @@
+# Python drives me mad. Couldn't find a better way to import bowlib2
+import os
+import sys
+PACKAGE_PARENT = '..'
+SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
+sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
+
 from bowlib2 import *
 
 damping = Damping(
@@ -49,4 +56,4 @@ bow = Bow(
     string=string,
 )
 
-symutil.saveBowToFile(bow, "./tmp/aTestBow.bow")
+symutil.saveBowToFile(bow, "./example/bows/bowBuildFroScratch.bow")
