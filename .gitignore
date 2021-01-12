@@ -1,0 +1,7 @@
+tmp
+old
+.vscode
+__pycache__
+
+*.res
+*.p
