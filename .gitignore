@@ -1,7 +1,11 @@
+om
+om-opt
 tmp
 old
+test_MDAO
 .vscode
 __pycache__
 
 *.res
 *.p
+external_code_comp_error.out

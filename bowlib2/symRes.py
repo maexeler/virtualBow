@@ -753,12 +753,14 @@ class SymRes(_Jsonizer):
             Smaller is better.
         """
 		nbrOfSymSteps = len(self.setup.limb_properties.length)
-		kappa = self.dynamics.states.kappa[-1][int(start*nbrOfSymSteps):int(end*nbrOfSymSteps)]
+		kappa = self.statics.states.kappa[-1][int(start*nbrOfSymSteps):int(end*nbrOfSymSteps)]
 		res = 0
 		min = numpy.min(kappa)
 		for i in range(len(kappa)):
 			res += kappa[i] - min
-		return res
+		# return res
+		# Sacle the error for different lengths
+		return res / len(kappa)
 
 	@classmethod
 	def initFromDict(cls, data):

@@ -5,11 +5,13 @@ cfk = Material(
     name = "cfk",
     rho = 1920.0
 )
-core = Material(
+bamboo = Material(
     E = 13130000000.0,
     name = "core",
     rho = 510.0
 )
+core = bamboo
+
 ash = Material(
     name='ash',
     E=12000000000.0,

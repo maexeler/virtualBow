@@ -9,3 +9,4 @@ from . import symRes
 from . import pyramidal
 from . import recurve
 from . import symutil
+from . import conversations

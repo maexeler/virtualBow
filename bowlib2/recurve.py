@@ -1,11 +1,27 @@
+from bowlib2.symRes import SymRes
 from typing import List
 from bowlib2 import symutil
 from bowlib2.bow import Bow, Layer, Masses, String, Damping, Settings, Dimensions
 
 class RecurveBow(Bow):
-    def __init__(self, t0: float, t2: float, t5: float, p2: float, p5: float,
-                damping: Damping, dimensions: Dimensions, layers: List[Layer], masses: Masses, profile: list, settings: Settings, string: String, width: list, comment: str = '', version: str = "0.7.1"
+
+    def __init__(self,
+         t0: float,    
+         t2: float,  p2: float,
+         t5: float,  p5: float,           
+         damping: Damping, 
+         dimensions: Dimensions, 
+         layers: List[Layer], 
+
+         masses: Masses, 
+         profile: list, 
+         settings: Settings, 
+         string: String, 
+         width: list, 
+         comment: str = '', 
+         version: str = "0.7.1"
         ):
+
         super().__init__(
             comment = comment,
             damping = damping,
@@ -36,28 +52,43 @@ class RecurveBow(Bow):
         t0 = self.getT(0)
         t2 = self.getT(2)
         t5 = self.getT(5)
-        self.setT(1, round(t2  + 0.125 * (t0 - t2), 4))
-        self.setT(3, round(t2  - 0.125 * (t2 - t5), 4))
-        self.setT(4, round(t5  + 0.125 * (t2 - t5), 4))
+        self.setT(1, t2  + 0.125 * (t0 - t2))
+        self.setT(3, t2  - 0.125 * (t2 - t5))
+        self.setT(4, t5  + 0.125 * (t2 - t5))
         self.setT(6, t5)
         
         p2 = self.getP(2)
         p5 = self.getP(5)
-        self.setP(1, round(p2 - 0.125 * p2, 3))
-        self.setP(3, round(p2 + 0.125 * (p5-p2), 3))
-        self.setP(4, round(p5 - 0.125 * (p5-p2), 3))
+        self.setP(1, p2 - 0.125 * p2)
+        self.setP(3, p2 + 0.125 * (p5-p2))
+        self.setP(4, p5 - 0.125 * (p5-p2))
         self.setP(6, 1.0)
     
     def setDrawForce(self, desiredForce: float):
         actForce = symutil.runSimulation(self, False).statics._final_draw_force
         t2_old = self.getT(2)
         t5_old = self.getT(5)
-        t2 = round(t2_old * ((desiredForce/actForce)**(1/2)),4)
-        t5 = round(t5_old * ((desiredForce/actForce)**(1/2)),4)
+        t2 = t2_old * ((desiredForce/actForce)**(1/1.4))
+        t5 = t5_old * ((desiredForce/actForce)**(1/1.4))
         self.setT(2, t2)
         self.setT(5, t5)
         self.calccoreHight()
     
+    def calculateArrowspeedforOM(self, p2: float, p5: float, drawForce: float) -> float:
+        """
+        This function is used by openmdao
+        """
+        self.setP(2, p2)
+        self.setP(5, p5)
+        self.setDrawForce(drawForce)
+        symutil.runSimulation(self)
+        final_draw_force = self._symRes.statics._final_draw_force
+        final_vel_arrow = self._symRes.dynamics.final_vel_arrow
+        res = final_draw_force / final_vel_arrow *10
+        
+        return res
+
+
     def getT(self, index: int) -> float:
         coreHeight = self.layers[1]._height
         return coreHeight[index][1]

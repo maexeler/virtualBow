@@ -9,6 +9,7 @@ class _Jsonizer:
 	def _serialize(obj):
 		res = {}
 		for key in obj.__dict__.keys():
+			if key == '_symRes': return res
 			if key[0] == '_':
 					res[key[1:]] = obj.__dict__[key]
 			else:
