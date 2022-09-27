@@ -644,7 +644,7 @@ class Setup(_Jsonizer):
 		self._string_mass = string_mass
 
 class Statics(_Jsonizer):
-	def __init__(self, drawing_work: float, final_draw_force: float, max_draw_force_index: int, max_grip_force_index: int, max_stress_index: list, max_stress_value: list, max_string_force_index: int, states: States, storage_ratio: float):
+	def __init__(self, drawing_work: float, final_draw_force: float, max_draw_force_index: int, max_grip_force_index: int, max_stress_index: list, max_stress_value: list, max_string_force_index: int, states: States):
 		self.drawing_work = drawing_work
 		self.final_draw_force = final_draw_force
 		self.max_draw_force_index = max_draw_force_index
@@ -653,7 +653,6 @@ class Statics(_Jsonizer):
 		self.max_stress_value = max_stress_value
 		self.max_string_force_index = max_string_force_index
 		self.states = states
-		self.storage_ratio = storage_ratio
 
 	@classmethod
 	def initFromDict(cls, data):
@@ -665,8 +664,7 @@ class Statics(_Jsonizer):
 			max_stress_index = data['max_stress_index'],
 			max_stress_value = data['max_stress_value'],
 			max_string_force_index = data['max_string_force_index'],
-			states = States.initFromDict(data['states']),
-			storage_ratio = data['storage_ratio'],
+			states = States.initFromDict(data['states'])
 			)
 
 	@property
@@ -732,14 +730,6 @@ class Statics(_Jsonizer):
 	@states.setter
 	def states(self, states: States):
 		self._states = states
-
-	@property
-	def storage_ratio(self) -> float:
-		return self._storage_ratio
-
-	@storage_ratio.setter
-	def storage_ratio(self, storage_ratio: float):
-		self._storage_ratio = storage_ratio
 
 class SymRes(_Jsonizer):
 	def __init__(self, dynamics: Dynamics, setup: Setup, statics: Statics, version: str):

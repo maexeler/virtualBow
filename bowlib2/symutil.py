@@ -40,9 +40,10 @@ def runSimulation(bow: Bow, dynamic: bool = True, symName: str = None) -> SymRes
             symRes = loadSymFromFile(symName)
             bow.cachedSymRes = symRes
             return symRes
-        except:
+        except Exception as e:
             # Assuming that the solver can't solve for the bow,
             # try to change a symulation parameter to help him
+            print(e)
             bow.settings.n_limb_elements += 1
 
 def runVirtualBowGui(bowFileName: str):

@@ -28,10 +28,39 @@ def optimizePyramidalBows(bowParams):
 test = bowParams23to32_35pd = [
     # [1.70, 0.50, 0.14, 1.3, 31, 40],
     # [1.70, 0.50, 0.14, 1.3, 32, 40],
-    [1.70, 0.50, 0.16, 1.3, 31, 40]
+    # [1.70, 0.50, 0.16, 1.3, 0.58, 50],
+    [1.65, 0.50, 0.16, 1.3, 0.58, 50],
+    [1.60, 0.50, 0.16, 1.3, 0.58, 50]
 ]
 
-simRes = optimizePyramidalBows(test)
-for bow in simRes:
+# simRes = optimizePyramidalBows(test)
+# for bow in simRes:
+#     print(bow)
+#     symutil.saveBowToFile(bow, "./tmp/opt/{}.bow".format(bow))
+
+
+def calcProductionBow(bowParam):
+    bow = createPyramidalBow(bowParam)
+    bow.taperedLimbLength = 0.4
+    drawForce = bowParam[5]*4.44
+    bow.optimizeForDrawForce(drawForce)
+    bow.optimizeForDrawForce(drawForce)
+    bow.optimizeForDrawForce(drawForce)
+    bow.optimizeForDrawForce(drawForce)
+    bow.optimizeForDrawForce(drawForce)
+    symutil.runSimulation(bow, dynamic=True)
     print(bow)
-    symutil.saveBowToFile(bow, "./tmp/opt/{}.bow".format(bow))
+    print(bow.layers[1].height)
+    symutil.saveBowToFile(bow, "./tmp/prod/{}.bow".format(bow))
+
+bowParam = [1.60, 0.50, 0.16, 1.3, 0.58, 50]
+calcProductionBow(bowParam)
+bowParam = [1.65, 0.50, 0.16, 1.3, 0.58, 50]
+calcProductionBow(bowParam)
+bowParam = [1.70, 0.50, 0.16, 1.3, 0.58, 50]
+calcProductionBow(bowParam)
+bowParam = [1.60, 0.50, 0.16, 1.3, 0.58, 45]
+calcProductionBow(bowParam)
+bowParam = [1.60, 0.50, 0.16, 1.3, 0.58, 40]
+calcProductionBow(bowParam)
+
